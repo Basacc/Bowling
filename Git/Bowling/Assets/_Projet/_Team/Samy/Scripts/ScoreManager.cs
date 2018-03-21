@@ -11,6 +11,10 @@ public class ScoreManager : MonoBehaviour
     public Text score;
     int scoreValue = 0;
 
+    private bool strike;
+    private bool spare;
+    private bool turn;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Ball")
@@ -19,7 +23,7 @@ public class ScoreManager : MonoBehaviour
 
     IEnumerator CountScore()
     {
-        if (targets == null)
+        if (targets.Count == 0)
             targets.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
 
         yield return new WaitForSeconds(5);
