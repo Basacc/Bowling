@@ -1,18 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
 
-    public GameObject[] targets;
+    public List<GameObject> targets = new List<GameObject>();
     private List<GameObject> fallenQuilles = new List<GameObject>();
-    private List<Vector3> initPos = new List<Vector3>();
-
-    private void Start()
-    {
-        
-    }
+    public Text score;
+    int scoreValue = 0;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -22,23 +19,27 @@ public class ScoreManager : MonoBehaviour
 
     IEnumerator CountScore()
     {
-        if (targets != null)
-        {
-            for (int i = 0; i < targets.Length; i++)
-            {
-                initPos.Add(targets[i].transform.position);
-            }
+        if (targets == null)
+            targets.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
 
-        }
-        yield return new WaitForSeconds(3);
-        for (int i = 0; i < targets.Length; i++)
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < targets.Count; i++)
         {
-            if (initPos[i] != targets[i].transform.position)
+            Quaternion quillRot = targets[i].transform.rotation;
+            float angleFromTop = Quaternion.Angle(Quaternion.Euler(new Vector3(-90, 0, 0)), quillRot);
+
+            if (angleFromTop > 40)
             {
                 fallenQuilles.Add(targets[i]);
                 Destroy(targets[i]);
             }
         }
+
+        scoreValue += fallenQuilles.Count;
+        score.text = scoreValue.ToString();
+        fallenQuilles.Clear();
+        targets.Clear();
+
     }
 }
 
