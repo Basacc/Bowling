@@ -46,22 +46,29 @@ public class ScoreManager : MonoBehaviour
         {
             if (spare || strike)
             {
-
+                scoreValue += fallenQuilles.Count * 2;
+            }
+            else
+            {
+                scoreValue += fallenQuilles.Count;
             }
         }
         else
         {
             if (strike)
             {
-
+                scoreValue += fallenQuilles.Count * 2;
+            }
+            else
+            {
+                scoreValue += fallenQuilles.Count;
             }
         }
 
         scoreValue += fallenQuilles.Count;
         score.text = scoreValue.ToString();
 
-        if (!firstTurn || fallenQuilles.Count >= 10)
-            fallenQuilles.Clear();
+        fallenQuilles.Clear();
 
         targets.Clear();
     }
@@ -74,7 +81,7 @@ public class ScoreManager : MonoBehaviour
 
     private void SetSpareAndStrike(int fallenQuilles, bool firstTurn)
     {
-        if (fallenQuilles == 10)
+        if (fallenQuilles >= 10)
             if (firstTurn)
                 strike = true;
             else
