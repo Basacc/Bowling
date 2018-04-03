@@ -71,6 +71,7 @@ public class ScoreManager : MonoBehaviour
         SetStrike(fallenQuillesT1.Count, firstTurn);
         SetSpare(fallenQuillesT1.Count, fallenQuillesT2.Count, firstTurn);
 
+        //clear lists and change turn
         if (!firstTurn)
         {
             fallenQuillesT1.Clear();
@@ -78,9 +79,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         if (!strike)
-        {
             firstTurn = !firstTurn;
-        }
         else
         {
             firstTurn = true;
@@ -89,7 +88,6 @@ public class ScoreManager : MonoBehaviour
         score.text = scoreValue.ToString();
         targets.Clear();
     }
-
 
 
     private void InitList(List<GameObject> listToInit)
@@ -106,11 +104,7 @@ public class ScoreManager : MonoBehaviour
                 strike = true;
         }
         else
-        {
             strike = false;
-        }
-
-
     }
 
     private void SetSpare(int countT1, int countT2, bool firstTurn)
@@ -121,13 +115,6 @@ public class ScoreManager : MonoBehaviour
                 spare = true;
         }
         else
-        {
             spare = false;
-        }
-
-
     }
 }
-
-
-
