@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnBall : MonoBehaviour {
 
     public GameObject ball;
-    public Vector3 position;
+    public Transform position;
 	// Use this for initialization
 	void Start () {
 		
@@ -15,8 +15,8 @@ public class SpawnBall : MonoBehaviour {
 	void Update () {
         if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
         {
-            Instantiate(ball);
-            ball.transform.position = position;
+            GameObject inst = Instantiate(ball);
+            inst.transform.position = new Vector3(position.position.x, position.position.y +0.5f, position.position.z);
         }
 	}
 }
