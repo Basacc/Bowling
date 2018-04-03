@@ -23,7 +23,7 @@ public class ScoreManager : MonoBehaviour
 
     IEnumerator CountScore()
     {
-        
+        if (targets.Count == 0)
             targets.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
 
         yield return new WaitForSeconds(5);

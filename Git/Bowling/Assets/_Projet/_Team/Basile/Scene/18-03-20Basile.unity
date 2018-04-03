@@ -2231,7 +2231,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.099999994, y: 0.099999994, z: 0.099999994}
-  m_Children: []
+  m_Children:
+  - {fileID: 1778992053}
   m_Father: {fileID: 1256628141}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12256,6 +12257,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37262da61a310f044803e105964a7df5, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1688707269 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1872313763569622, guid: 7515c1345ee66ac4080f7472a32aac6d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1329505724}
 --- !u!1 &1688894800 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 37262da61a310f044803e105964a7df5, type: 3}
@@ -13209,6 +13215,48 @@ Transform:
   m_PrefabParentObject: {fileID: 4474667052789766, guid: 7515c1345ee66ac4080f7472a32aac6d,
     type: 2}
   m_PrefabInternal: {fileID: 1626185224}
+--- !u!1 &1778992052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1778992053}
+  - component: {fileID: 1778992054}
+  m_Layer: 0
+  m_Name: BallSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1778992053
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1778992052}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_Children: []
+  m_Father: {fileID: 336342081}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1778992054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1778992052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9fc0d1aae2a1444a1cd6965f17ea71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 1688707269}
+  position: {x: 0, y: 0, z: 0}
 --- !u!1001 &1811390123
 Prefab:
   m_ObjectHideFlags: 0
