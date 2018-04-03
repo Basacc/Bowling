@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,8 @@ public class ScoreManager : MonoBehaviour
 {
 
     public List<GameObject> targets = new List<GameObject>();
-    private List<GameObject> fallenQuilles = new List<GameObject>();
+    private List<GameObject> fallenQuillesT1 = new List<GameObject>();
+    private List<GameObject> fallenQuillesT2 = new List<GameObject>();
     public Text score;
     int scoreValue = 0;
 
@@ -34,44 +36,61 @@ public class ScoreManager : MonoBehaviour
 
             if (angleFromTop > 40)
             {
-                fallenQuilles.Add(targets[i]);
+                if (firstTurn)
+                    fallenQuillesT1.Add(targets[i]);
+                else
+                    fallenQuillesT2.Add(targets[i]);
                 Destroy(targets[i]);
             }
         }
-
-        SetSpareAndStrike(fallenQuilles.Count, firstTurn);
 
         //Count score
         if (firstTurn)
         {
             if (spare || strike)
             {
-                scoreValue += fallenQuilles.Count * 2;
+                scoreValue += fallenQuillesT1.Count * 2;
             }
             else
             {
-                scoreValue += fallenQuilles.Count;
+                scoreValue += fallenQuillesT1.Count;
             }
         }
         else
         {
             if (strike)
             {
-                scoreValue += fallenQuilles.Count * 2;
+                scoreValue += fallenQuillesT2.Count * 2;
             }
             else
             {
-                scoreValue += fallenQuilles.Count;
+                scoreValue += fallenQuillesT2.Count;
             }
         }
 
-        scoreValue += fallenQuilles.Count;
+        SetStrike(fallenQuillesT1.Count, firstTurn);
+        SetSpare(fallenQuillesT1.Count, fallenQuillesT2.Count, firstTurn);
+
+        if (!firstTurn)
+        {
+            fallenQuillesT1.Clear();
+            fallenQuillesT2.Clear();
+        }
+
+        if (!strike)
+        {
+            firstTurn = !firstTurn;
+        }
+        else
+        {
+            firstTurn = true;
+            fallenQuillesT1.Clear();
+        }
         score.text = scoreValue.ToString();
-
-        fallenQuilles.Clear();
-
         targets.Clear();
     }
+
+
 
     private void InitList(List<GameObject> listToInit)
     {
@@ -79,18 +98,34 @@ public class ScoreManager : MonoBehaviour
             listToInit.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
     }
 
-    private void SetSpareAndStrike(int fallenQuilles, bool firstTurn)
+    private void SetStrike(int fallenQuilles, bool firstTurn)
     {
-        if (fallenQuilles >= 10)
+        if (fallenQuilles == 10)
+        {
             if (firstTurn)
                 strike = true;
-            else
-                spare = true;
+        }
         else
         {
             strike = false;
+        }
+
+
+    }
+
+    private void SetSpare(int countT1, int countT2, bool firstTurn)
+    {
+        if ((countT1 + countT2) == 10)
+        {
+            if (!firstTurn)
+                spare = true;
+        }
+        else
+        {
             spare = false;
         }
+
+
     }
 }
 
