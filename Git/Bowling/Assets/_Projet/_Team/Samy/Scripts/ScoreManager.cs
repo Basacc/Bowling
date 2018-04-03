@@ -11,9 +11,9 @@ public class ScoreManager : MonoBehaviour
     public Text score;
     int scoreValue = 0;
 
-    private bool strike;
-    private bool spare;
-    private bool turn;
+    private bool strike = false; //true if strike previous turn
+    private bool spare = false; //true if spare previous turn
+    private bool firstTurn = true; //true if first turn
 
     private void OnTriggerEnter(Collider other)
     {
@@ -23,9 +23,9 @@ public class ScoreManager : MonoBehaviour
 
     IEnumerator CountScore()
     {
-        
-            targets.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
+        InitList(targets);
 
+        //Check fallen quilles
         yield return new WaitForSeconds(5);
         for (int i = 0; i < targets.Count; i++)
         {
@@ -39,11 +39,51 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
+        SetSpareAndStrike(fallenQuilles.Count, firstTurn);
+
+        //Count score
+        if (firstTurn)
+        {
+            if (spare || strike)
+            {
+
+            }
+        }
+        else
+        {
+            if (strike)
+            {
+
+            }
+        }
+
         scoreValue += fallenQuilles.Count;
         score.text = scoreValue.ToString();
-        fallenQuilles.Clear();
-        targets.Clear();
 
+        if (!firstTurn || fallenQuilles.Count >= 10)
+            fallenQuilles.Clear();
+
+        targets.Clear();
+    }
+
+    private void InitList(List<GameObject> listToInit)
+    {
+        if (listToInit.Count == 0)
+            listToInit.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
+    }
+
+    private void SetSpareAndStrike(int fallenQuilles, bool firstTurn)
+    {
+        if (fallenQuilles == 10)
+            if (firstTurn)
+                strike = true;
+            else
+                spare = true;
+        else
+        {
+            strike = false;
+            spare = false;
+        }
     }
 }
 
