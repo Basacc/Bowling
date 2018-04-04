@@ -79,7 +79,7 @@ public class ScoreManager : MonoBehaviour
 
         if (!strike)
         {
-            firstTurn = !firstTurn;
+            firstTurn = false;
         }
         else
         {
@@ -100,14 +100,16 @@ public class ScoreManager : MonoBehaviour
 
     private void SetStrike(int fallenQuilles, bool firstTurn)
     {
-        if (fallenQuilles == 10)
+        if (firstTurn && fallenQuilles == 10)
         {
-            if (firstTurn)
                 strike = true;
+            Debug.Log("strike");
         }
-        else
+
+        if(firstTurn == false)
         {
             strike = false;
+            Debug.Log("strike end");
         }
 
 
@@ -115,14 +117,16 @@ public class ScoreManager : MonoBehaviour
 
     private void SetSpare(int countT1, int countT2, bool firstTurn)
     {
-        if ((countT1 + countT2) == 10)
+        if (firstTurn == false && !strike && (countT1 + countT2) == 10)
         {
-            if (!firstTurn)
                 spare = true;
+            Debug.Log("spare");
         }
-        else
+       
+        if(strike || firstTurn)
         {
             spare = false;
+            Debug.Log("spare end");
         }
 
 
