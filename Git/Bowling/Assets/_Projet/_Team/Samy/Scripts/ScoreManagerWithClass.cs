@@ -89,7 +89,7 @@ public class ScoreManagerWithClass : MonoBehaviour
                 {
                     //Init score
                     turnHistoric[turn].scoreSecondThrow = fallenQuilles.Count;
-                    turnHistoric[turn].scoreTurn += turnHistoric[turn].scoreFirstThrow;
+                    turnHistoric[turn].scoreTurn += turnHistoric[turn].scoreSecondThrow;
                     scoreValue += turnHistoric[turn].scoreSecondThrow;
                     fallenQuilles.Clear();
 
