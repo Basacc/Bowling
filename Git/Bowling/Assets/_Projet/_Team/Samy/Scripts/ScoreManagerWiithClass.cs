@@ -50,6 +50,8 @@ public class ScoreManagerWithClass : MonoBehaviour
             //All other turns
             default:
                 //First throw
+                Debug.Log("Premier lancer?: " + turnHistoric[turn].firstThrow + " - FallenQuille:" + fallenQuilles.Count);
+
                 if (turnHistoric[turn].firstThrow)
                 {
                     //Init score
@@ -64,6 +66,7 @@ public class ScoreManagerWithClass : MonoBehaviour
                     {
                         if (turnHistoric[turn - 1].strike || turnHistoric[turn - 1].spare)
                         {
+                            Debug.Log("Strike or spare previous turn detected");
                             turnHistoric[turn - 1].scoreTurn += turnHistoric[turn].scoreFirstThrow;
                             scoreValue += turnHistoric[turn].scoreFirstThrow;
                         }
@@ -72,6 +75,7 @@ public class ScoreManagerWithClass : MonoBehaviour
                     //Check Strike this turn
                     if (turnHistoric[turn].scoreFirstThrow == 10)
                     {
+                        Debug.Log("Strike!");
                         turnHistoric[turn].strike = true;
                         turn++;
                     }
@@ -95,6 +99,7 @@ public class ScoreManagerWithClass : MonoBehaviour
                     {
                         if (turnHistoric[turn - 1].strike)
                         {
+                            Debug.Log("Strike previous turn detected");
                             turnHistoric[turn - 1].scoreTurn += turnHistoric[turn].scoreSecondThrow;
                             scoreValue += turnHistoric[turn].scoreSecondThrow;
                         }
@@ -103,10 +108,12 @@ public class ScoreManagerWithClass : MonoBehaviour
                     //Check Spare this turn
                     if (turnHistoric[turn].scoreFirstThrow + turnHistoric[turn].scoreSecondThrow == 10)
                     {
+                        Debug.Log("Spare!");
                         turnHistoric[turn].spare = true;
                     }
                     turn++;
                 }
+                
                 break;
         }
 
