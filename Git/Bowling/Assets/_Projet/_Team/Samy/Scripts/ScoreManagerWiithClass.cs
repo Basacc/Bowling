@@ -7,19 +7,14 @@ using UnityEngine.UI;
 public class ScoreManagerWithClass : MonoBehaviour
 {
 
-    public List<GameObject> targets = new List<GameObject>(); 
-    private List<GameObject> fallenQuillesT1 = new List<GameObject>();
-    private List<GameObject> fallenQuillesT2 = new List<GameObject>();
+    public List<GameObject> targets = new List<GameObject>();
+    private List<GameObject> fallenQuilles = new List<GameObject>();
 
     private List<Turn> turnHistoric = new List<Turn>(10);
     private int turn = 0;
 
     public Text score;
     int scoreValue = 0;
-
-    private bool strike = false; //true if strike previous turn
-    private bool spare = false; //true if spare previous turn
-    private bool firstTurn = true; //true if first turn
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,9 +26,9 @@ public class ScoreManagerWithClass : MonoBehaviour
     {
         InitList(targets);
 
-        //Check fallen quilles
         yield return new WaitForSeconds(5);
 
+        //Check fallen quilles
         for (int i = 0; i < targets.Count; i++)
         {
             Quaternion quillRot = targets[i].transform.rotation;
@@ -41,111 +36,100 @@ public class ScoreManagerWithClass : MonoBehaviour
 
             if (angleFromTop > 40)
             {
-                if (firstTurn)
-                    fallenQuillesT1.Add(targets[i]);
-                else
-                    fallenQuillesT2.Add(targets[i]);
+                fallenQuilles.Add(targets[i]);
                 Destroy(targets[i]);
             }
         }
 
         //Count score
-        if (firstTurn)
+        switch (turn)
         {
-            if (spare || strike)
-            {
-                scoreValue += fallenQuillesT1.Count * 2;
-            }
-            else
-            {
-                scoreValue += fallenQuillesT1.Count;
-            }
-        }
-        else
-        {
-            if (strike)
-            {
-                scoreValue += fallenQuillesT2.Count * 2;
-            }
-            else
-            {
-                scoreValue += fallenQuillesT2.Count;
-            }
+            //Last turn
+            case 9:
+                break;
+            //All other turns
+            default:
+                //First throw
+                if (turnHistoric[turn].firstThrow)
+                {
+                    //Init score
+                    turnHistoric[turn].scoreFirstThrow = fallenQuilles.Count;
+                    turnHistoric[turn].scoreTurn = turnHistoric[turn].scoreFirstThrow;
+                    fallenQuilles.Clear();
+
+                    scoreValue += turnHistoric[turn].scoreFirstThrow;
+
+                    //Check if Strike or Spare previous turn and init score
+                    if (turnHistoric[turn - 1] != null)
+                    {
+                        if (turnHistoric[turn - 1].strike || turnHistoric[turn - 1].spare)
+                        {
+                            turnHistoric[turn - 1].scoreTurn += turnHistoric[turn].scoreFirstThrow;
+                            scoreValue += turnHistoric[turn].scoreFirstThrow;
+                        }
+                    }
+
+                    //Check Strike this turn
+                    if (turnHistoric[turn].scoreFirstThrow == 10)
+                    {
+                        turnHistoric[turn].strike = true;
+                        turn++;
+                    }
+                    else
+                    {
+                        turnHistoric[turn].firstThrow = false; //?passage dans le else suivant?
+                    }
+                }
+                //Second throw
+                else
+                {
+                    //Init score
+                    turnHistoric[turn].scoreSecondThrow = fallenQuilles.Count;
+                    turnHistoric[turn].scoreTurn += turnHistoric[turn].scoreFirstThrow;
+                    fallenQuilles.Clear();
+
+                    scoreValue += turnHistoric[turn].scoreSecondThrow;
+
+                    //Check if Strike previous turn and init score
+                    if (turnHistoric[turn - 1] != null)
+                    {
+                        if (turnHistoric[turn - 1].strike)
+                        {
+                            turnHistoric[turn - 1].scoreTurn += turnHistoric[turn].scoreSecondThrow;
+                            scoreValue += turnHistoric[turn].scoreSecondThrow;
+                        }
+                    }
+
+                    //Check Spare this turn
+                    if (turnHistoric[turn].scoreFirstThrow + turnHistoric[turn].scoreSecondThrow == 10)
+                    {
+                        turnHistoric[turn].spare = true;
+                    }
+                    turn++;
+                }
+                break;
         }
 
-        SetStrike(fallenQuillesT1.Count, firstTurn);
-        SetSpare(fallenQuillesT1.Count, fallenQuillesT2.Count, firstTurn);
-
-        if (!firstTurn)
-        {
-            fallenQuillesT1.Clear();
-            fallenQuillesT2.Clear();
-        }
-
-        if (!strike)
-        {
-            firstTurn = false;
-        }
-        else
-        {
-            firstTurn = true;
-            fallenQuillesT1.Clear();
-        }
         score.text = scoreValue.ToString();
         targets.Clear();
     }
-
-
 
     private void InitList(List<GameObject> listToInit)
     {
         if (listToInit.Count == 0)
             listToInit.AddRange(GameObject.FindGameObjectsWithTag("Quille"));
     }
-
-    private void SetStrike(int fallenQuilles, bool firstTurn)
-    {
-        if (firstTurn && fallenQuilles == 10)
-        {
-                strike = true;
-            Debug.Log("strike");
-        }
-
-        if(firstTurn == false)
-        {
-            strike = false;
-            Debug.Log("strike end");
-        }
-
-
-    }
-
-    private void SetSpare(int countT1, int countT2, bool firstTurn)
-    {
-        if (firstTurn == false && !strike && (countT1 + countT2) == 10)
-        {
-                spare = true;
-            Debug.Log("spare");
-        }
-       
-        if(strike || firstTurn)
-        {
-            spare = false;
-            Debug.Log("spare end");
-        }
-
-
-    }
 }
 
 public class Turn
 {
-    public int turn;
     public int scoreFirstThrow;
     public int scoreSecondThrow;
+    public int scoreTurn;
     public bool spare = false;
     public bool strike = false;
     public bool firstThrow = true;
+    public bool extraThrow = false;
 
 }
 
