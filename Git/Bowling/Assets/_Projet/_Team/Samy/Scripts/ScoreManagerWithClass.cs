@@ -57,9 +57,9 @@ public class ScoreManagerWithClass : MonoBehaviour
                     //Init score
                     turnHistoric[turn].scoreFirstThrow = fallenQuilles.Count;
                     turnHistoric[turn].scoreTurn = turnHistoric[turn].scoreFirstThrow;
+                    scoreValue += turnHistoric[turn].scoreFirstThrow;
                     fallenQuilles.Clear();
 
-                    scoreValue += turnHistoric[turn].scoreFirstThrow;
 
                     //Check if Strike or Spare previous turn and init score
                     if (turnHistoric[turn - 1] != null)
@@ -90,9 +90,9 @@ public class ScoreManagerWithClass : MonoBehaviour
                     //Init score
                     turnHistoric[turn].scoreSecondThrow = fallenQuilles.Count;
                     turnHistoric[turn].scoreTurn += turnHistoric[turn].scoreFirstThrow;
+                    scoreValue += turnHistoric[turn].scoreSecondThrow;
                     fallenQuilles.Clear();
 
-                    scoreValue += turnHistoric[turn].scoreSecondThrow;
 
                     //Check if Strike previous turn and init score
                     if (turnHistoric[turn - 1] != null)
@@ -113,7 +113,6 @@ public class ScoreManagerWithClass : MonoBehaviour
                     }
                     turn++;
                 }
-                
                 break;
         }
 
